@@ -3,6 +3,7 @@ import random
 
 her_name = "Alicia"
 faulty_endpoints = []
+timedout_endpoints = []
 
 def get_starter(api_number=-1):
     api_endpoints = {
@@ -74,9 +75,19 @@ def get_starter(api_number=-1):
             return data["value"]
         else:
             return "Error, please try again."
+            
+    except TimeoutException as e: # handle differently because it could also be the user's internet
+        # handle timeout exception in a specific way
+        if endpoint in timedout_endpoints: # if this is the second bad request, ass to faulty ones but also suggest checking internet
+            print("connection timed out. Maybe check your internet connection")
+            faulty_endpoints.append(endpoint)
+        else:
+            timedout_endpoints.append(endpoint)
+        return get_starter() #try again. Though nested calls are certainly not a great solution
         
     except Exception as e:
         faulty_endpoints.append(endpoint)
+        return get_starter() #try again. Though nested calls are certainly not a great solution
     
 
     

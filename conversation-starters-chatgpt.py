@@ -3,12 +3,15 @@ import random
 
 her_name = "Alicia"
 
-def get_starter():
+def get_starter(api_number=-1):
     api_endpoints = {
         "icanhazdadjoke": "https://icanhazdadjoke.com/",
         "opentdb": "https://opentdb.com/api.php?amount=1&type=multiple",
         "dad-jokes-rapidapi": "https://dad-jokes.p.rapidapi.com/random/joke",
         "love-calculator": "https://love-calculator.p.rapidapi.com/getPercentage",
+        "number-fact": "http://numbersapi.com/random/trivia",
+        "roast": "https://evilinsult.com/generate_insult.php?lang=en&type=json",
+        "chuck-norris-joke": "https://api.chucknorris.io/jokes/random"
     }
     
     api_headers = {
@@ -22,22 +25,28 @@ def get_starter():
         },
         api_endpoints["icanhazdadjoke"]: {
             "Accept": "application/json"
-        }
+        },
     }
     
     api_params = {
         api_endpoints["love-calculator"]: {"sname": her_name, "fname": 'Patrick'},
     }
 
-    endpoint = random.choice(list(api_endpoints.values()))
+    if api_number > -1:
+        endpoint = list(api_endpoints.values())[api_number]
+    else:
+        endpoint = random.choice(list(api_endpoints.values()))
     print(endpoint)
     headers = api_headers.get(endpoint, {}) # get headers or empty object if none
-    #print(headers)
+    print(headers)
     params = api_params.get(endpoint, {}) # get params or empty object if none
-    #print(params)
+    print(params)
 
     response = requests.get(endpoint, headers=headers, params=params)
-    data = response.json()
+    try:
+        data = response.json()
+    except:
+        data = response.text
     
     
     
@@ -52,6 +61,14 @@ def get_starter():
         }
         return data["body"][0]["setup"] + " - " + data["body"][0]["punchline"]
     elif endpoint == api_endpoints["love-calculator"]:
-        return f"Compatibility: {data['percentage']}% - {data['result']}"
-
-print(get_starter())
+        return f"{her_name} and Patrick are {data['percentage']}% in love"
+    elif endpoint == api_endpoints["number-fact"]:
+        return data
+    elif endpoint == api_endpoints["roast"]:
+        return data["insult"]
+    elif endpoint == api_endpoints["chuck-norris-joke"]:
+        return data["value"]
+    else:
+        return "Error, please try again."
+        
+print(get_starter()) # todo: put in a try block and just use a different endpoint if there is an error and possibly remember the faulty endpoint

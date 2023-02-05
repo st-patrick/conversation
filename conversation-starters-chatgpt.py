@@ -1,6 +1,9 @@
 import requests
 import random
 
+# get basics out of the way
+rapidapi_key = "ddc3ca0c34msh011967171559ccfp117a35jsn1df2de149ef3"
+
 her_name = "Alicia"
 faulty_endpoints = []
 timedout_endpoints = []
@@ -13,25 +16,30 @@ def get_starter(api_number=-1):
         "love-calculator": "https://love-calculator.p.rapidapi.com/getPercentage",
         "number-fact": "http://numbersapi.com/random/trivia",
         "roast": "https://evilinsult.com/generate_insult.php?lang=en&type=json",
-        "chuck-norris-joke": "https://api.chucknorris.io/jokes/random"
+        "chuck-norris-joke": "https://api.chucknorris.io/jokes/random",
+        "riddlie": "https://riddlie.p.rapidapi.com/api/v1/riddles/random"
     }
     
     api_headers = {
         api_endpoints["dad-jokes-rapidapi"]: {
             "x-rapidapi-host": "dad-jokes.p.rapidapi.com",
-            "x-rapidapi-key": "ddc3ca0c34msh011967171559ccfp117a35jsn1df2de149ef3"
+            "x-rapidapi-key": rapidapi_key
         },
         api_endpoints["love-calculator"]: {
-            'X-RapidAPI-Key': 'ddc3ca0c34msh011967171559ccfp117a35jsn1df2de149ef3',
+            'X-RapidAPI-Key': rapidapi_key,
             'X-RapidAPI-Host': 'love-calculator.p.rapidapi.com'
         },
         api_endpoints["icanhazdadjoke"]: {
             "Accept": "application/json"
         },
+        api_endpoints["riddlie"]: {
+            'X-RapidAPI-Key': rapidapi_key,
+            'X-RapidAPI-Host': 'riddlie.p.rapidapi.com'
+        }
     }
     
     api_params = {
-        api_endpoints["love-calculator"]: {"sname": her_name, "fname": 'Patrick'},
+        api_endpoints["love-calculator"]: {"sname": her_name, "fname": 'Patrick'}
     }
 
     if api_number > -1:
@@ -58,7 +66,7 @@ def get_starter(api_number=-1):
         if endpoint == api_endpoints["icanhazdadjoke"]:
             return data["joke"]
         elif endpoint == api_endpoints["opentdb"]:
-            return data["results"][0]["question"]
+            return data["results"][0]["question"] + " ===========> " + data["results"][0]["correct_answer"]
         elif endpoint == api_endpoints["dad-jokes-rapidapi"]:
             headers = {
                 "x-rapidapi-host": "dad-jokes.p.rapidapi.com",
@@ -73,6 +81,8 @@ def get_starter(api_number=-1):
             return data["insult"]
         elif endpoint == api_endpoints["chuck-norris-joke"]:
             return data["value"]
+        elif endpoint == api_endpoints["riddlie"]:
+            return data['riddle'] + " =======> " + data['answer']
         else:
             return "Error, please try again."
             
@@ -93,7 +103,7 @@ def get_starter(api_number=-1):
     
 
         
-#for i in range(7): # test all endpoints in order for debugging
+#for i in range(8): # test all endpoints in order for debugging
 print(get_starter()) # todo: put in a try block and just use a different endpoint if there is an error and possibly remember the faulty endpoint
 print("faulty endpoints: ")
 print(faulty_endpoints)

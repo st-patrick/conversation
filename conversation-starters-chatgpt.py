@@ -17,7 +17,8 @@ def get_starter(api_number=-1):
         "number-fact": "http://numbersapi.com/random/trivia",
         "roast": "https://evilinsult.com/generate_insult.php?lang=en&type=json",
         "chuck-norris-joke": "https://api.chucknorris.io/jokes/random",
-        "riddlie": "https://riddlie.p.rapidapi.com/api/v1/riddles/random"
+        "riddlie": "https://riddlie.p.rapidapi.com/api/v1/riddles/random",
+        "jokeAPI": "https://v2.jokeapi.dev/joke/Any?format=txt"
     }
     
     api_headers = {
@@ -75,8 +76,6 @@ def get_starter(api_number=-1):
             return data["body"][0]["setup"] + " - " + data["body"][0]["punchline"]
         elif endpoint == api_endpoints["love-calculator"]:
             return f"{her_name} and Patrick are {data['percentage']}% in love"
-        elif endpoint == api_endpoints["number-fact"]:
-            return data
         elif endpoint == api_endpoints["roast"]:
             return data["insult"]
         elif endpoint == api_endpoints["chuck-norris-joke"]:
@@ -84,7 +83,7 @@ def get_starter(api_number=-1):
         elif endpoint == api_endpoints["riddlie"]:
             return data['riddle'] + " =======> " + data['answer']
         else:
-            return "Error, please try again."
+            return data
             
     except TimeoutException as e: # handle differently because it could also be the user's internet
         # handle timeout exception in a specific way
@@ -103,7 +102,7 @@ def get_starter(api_number=-1):
     
 
         
-#for i in range(8): # test all endpoints in order for debugging
-print(get_starter()) # todo: put in a try block and just use a different endpoint if there is an error and possibly remember the faulty endpoint
-print("faulty endpoints: ")
+#for i in range(9): # test all endpoints in order for debugging
+print(get_starter(8)) # todo: put in a try block and just use a different endpoint if there is an error and possibly remember the faulty endpoint
+print("\nfaulty endpoints: ")
 print(faulty_endpoints)
